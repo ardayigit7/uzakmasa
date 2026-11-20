@@ -1,0 +1,6 @@
+config.json
+*.log
+agent.log
+.env
+.vercel
+node_modules
