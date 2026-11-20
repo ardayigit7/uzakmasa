@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0b0b12">
+<title>UzakMasa</title>
+<style>
+:root{--bg:#07070c;--line:rgba(255,255,255,.07);--line2:rgba(255,255,255,.12);--tx:#ececf4;--mut:#8a8aa2;--ac:#7c5cff;--ac2:#c04bff;--ok:#30d47c;--warn:#f5c542;--bad:#ff5c72}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;color:var(--tx);font:15px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+body{background:radial-gradient(1100px 600px at 0% -10%,rgba(124,92,255,.20),transparent 60%),radial-gradient(900px 500px at 110% 0%,rgba(192,75,255,.13),transparent 60%),var(--bg);background-attachment:fixed;min-height:100vh}
+button{font:inherit;color:var(--tx);background:rgba(255,255,255,.05);border:1px solid var(--line2);border-radius:12px;padding:10px 14px;cursor:pointer;transition:background .15s,transform .1s,opacity .15s;display:inline-flex;align-items:center;justify-content:center;gap:7px}
+button:hover{background:rgba(255,255,255,.09)}
+button:active{transform:scale(.97)}
+button:disabled{opacity:.35;pointer-events:none}
+button.pri{background:linear-gradient(135deg,var(--ac),var(--ac2));border:0;font-weight:600;box-shadow:0 8px 24px -8px rgba(140,80,255,.7)}
+button.sm{padding:7px 11px;font-size:13px;border-radius:10px}
+button.ghost{background:transparent;border-color:transparent;color:var(--mut)}
+button.danger{color:#ff8a9a}
+button.on{background:rgba(124,92,255,.22);border-color:rgba(124,92,255,.6)}
+button svg{width:18px;height:18px;flex:none}
+input[type=text]{width:100%;background:rgba(0,0,0,.35);color:var(--tx);border:1px solid var(--line2);border-radius:12px;padding:11px 13px;font:inherit;outline:none}
+input[type=text]:focus{border-color:rgba(124,92,255,.7)}
+header{display:flex;align-items:center;gap:8px;padding:calc(14px + env(safe-area-inset-top)) 16px 12px;position:sticky;top:0;background:rgba(7,7,12,.72);backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);z-index:5;border-bottom:1px solid var(--line)}
+.logo{display:flex;align-items:center;gap:10px;flex:1;font-weight:700;font-size:19px;letter-spacing:-.3px}
+.logo i{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,var(--ac),var(--ac2));display:grid;place-items:center;box-shadow:0 6px 16px -6px rgba(140,80,255,.8)}
+.logo i svg{width:18px;height:18px}
+header button{padding:9px;border-radius:12px}
+main{padding:16px;max-width:1100px;margin:0 auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+.card{background:linear-gradient(180deg,rgba(32,32,50,.78),rgba(17,17,27,.78));border:1px solid var(--line);border-radius:24px;padding:18px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 24px 48px -28px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.05)}
+.ch{display:flex;align-items:center;gap:12px}
+.av{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(124,92,255,.25),rgba(192,75,255,.12));border:1px solid rgba(124,92,255,.3);flex:none;color:#d6caff}
+.av svg{width:22px;height:22px}
+.ch h3{margin:0;font-size:17px;letter-spacing:-.2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:4px 10px;border-radius:99px;background:rgba(255,92,114,.12);color:#ff8a9a;flex:none}
+.pill.on{background:rgba(48,212,124,.12);color:#5fe39b}
+.pill b{width:7px;height:7px;border-radius:50%;background:currentColor}
+.pill.on b{animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(48,212,124,.6)}70%{box-shadow:0 0 0 7px rgba(48,212,124,0)}100%{box-shadow:0 0 0 0 rgba(48,212,124,0)}}
+.sub{color:var(--mut);font-size:12.5px}
+.meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.chip{font-size:12px;color:var(--mut);background:rgba(255,255,255,.04);border:1px solid var(--line);padding:4px 10px;border-radius:99px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chip b{color:var(--tx);font-weight:600}
+.chip.mode{color:#cbbcff;border-color:rgba(124,92,255,.35);background:rgba(124,92,255,.1)}
+.row{margin:12px 0 0}
+.lbl{display:flex;justify-content:space-between;font-size:12.5px;color:var(--mut);margin-bottom:6px}
+.lbl span:last-child{color:var(--tx);font-variant-numeric:tabular-nums}
+.bar{height:6px;background:rgba(255,255,255,.06);border-radius:6px;overflow:hidden}.bar>i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,#2bd17a,#6ee7a8);transition:width .6s}
+.bar.w>i{background:linear-gradient(90deg,#f5a742,#f5c542)}.bar.b>i{background:linear-gradient(90deg,#ff4d6a,#ff8a9a)}
+.acts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+.acts .wide,.acts .pair{grid-column:1/-1}
+.pair{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:8px}
+.acts button,.pair button{flex-direction:column;gap:6px;padding:12px 6px;font-size:12.5px;border-radius:15px}
+.acts button.wide{flex-direction:row;font-size:15px;padding:14px}
+.foot{display:flex;justify-content:flex-end;margin-top:6px;margin-bottom:-6px}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.empty{text-align:center;color:var(--mut);padding:60px 10px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:none;align-items:flex-end;justify-content:center;z-index:20}
+.modal.show{display:flex}
+.sheet{background:#11111b;border:1px solid var(--line2);border-radius:26px 26px 0 0;width:100%;max-width:640px;max-height:90vh;overflow:auto;padding:18px 18px calc(18px + env(safe-area-inset-bottom));animation:up .22s ease-out}
+@keyframes up{from{transform:translateY(30px);opacity:.4}to{transform:none;opacity:1}}
+@media(min-width:700px){.modal{align-items:center}.sheet{border-radius:24px}}
+.sheet h2{margin:0 0 10px;font-size:18px;letter-spacing:-.2px}
+.shead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}.shead h2{margin:0}
+.shead button{padding:7px;border-radius:10px}
+pre,code{background:rgba(0,0,0,.4);border:1px solid var(--line);border-radius:12px;padding:10px;font:12px/1.5 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-all;margin:8px 0}
+ol{padding-left:20px;margin:8px 0}li{margin:5px 0}
+.warn{color:var(--warn);font-size:13px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;background:rgba(255,255,255,.05);border-radius:13px;margin-bottom:10px}
+.seg button{border:0;background:transparent;padding:9px;border-radius:10px;color:var(--mut);font-weight:600}
+.seg button.on{background:rgba(255,255,255,.1);color:var(--tx);outline:0}
+#aList{min-height:220px;max-height:58vh;overflow:auto;margin-top:8px}
+.it{display:flex;align-items:center;gap:12px;padding:10px 2px;border-bottom:1px solid var(--line)}
+.ai{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-weight:700;font-size:16px;flex:none;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.3)}
+.it .tx{flex:1;min-width:0}.it .tx div{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.it .acts2{display:flex;gap:6px;flex:none}
+.note{color:var(--mut);font-size:13px;text-align:center;padding:30px 10px}
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.pgrid button{flex-direction:column;gap:6px;padding:14px 6px;font-size:12.5px;border-radius:15px}
+textarea{width:100%;min-height:130px;background:rgba(0,0,0,.35);color:var(--tx);border:1px solid var(--line2);border-radius:12px;padding:11px 13px;font:inherit;outline:none;resize:vertical}
+input[type=range]{width:100%;accent-color:#7c5cff;margin-top:8px}
+#viewer{position:fixed;inset:0;background:#000;z-index:30;display:none;flex-direction:column}
+#viewer.show{display:flex}
+#viewer button{touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+#vtop{display:flex;align-items:center;gap:10px;padding:calc(8px + env(safe-area-inset-top)) calc(10px + env(safe-area-inset-right)) 8px calc(10px + env(safe-area-inset-left));background:#0b0b12;border-bottom:1px solid var(--line)}
+#vstat{margin-left:auto;font-size:12px;color:var(--mut);background:rgba(255,255,255,.06);padding:6px 11px;border-radius:99px;font-variant-numeric:tabular-nums;white-space:nowrap}
+#vwrap{flex:1;position:relative;min-height:0;display:flex;align-items:center;justify-content:center;touch-action:none;overflow:hidden}
+#vimg{max-width:100%;max-height:100%;object-fit:contain;transform-origin:0 0;will-change:transform;user-select:none;-webkit-user-select:none;-webkit-user-drag:none;-webkit-touch-callout:none;touch-action:none}
+#vstat.ok{color:#5fe39b}
+.rip{position:absolute;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 2px rgba(124,92,255,.7);pointer-events:none;z-index:5;animation:rip .5s ease-out forwards}
+@keyframes rip{from{transform:scale(.3);opacity:1}to{transform:scale(1.3);opacity:0}}
+#vbar{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:8px calc(8px + env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) calc(8px + env(safe-area-inset-left));background:#0b0b12;border-top:1px solid var(--line)}
+.vb{flex-direction:column;gap:4px;min-height:58px;padding:8px 2px;font-size:11.5px;border-radius:14px}
+.vb svg{width:22px;height:22px}
+#vClose{width:46px;height:46px;padding:0;border-radius:14px}
+#vClose svg{width:22px;height:22px}
+#vfab{display:none;position:fixed;right:calc(12px + env(safe-area-inset-right));top:calc(12px + env(safe-area-inset-top));z-index:40;width:52px;height:52px;border-radius:50%;padding:0;opacity:.55;background:rgba(20,20,32,.85)}
+#vfab svg{width:24px;height:24px}
+#viewer.full #vfab{display:flex}
+#viewer.full #vtop{position:absolute;top:0;left:0;right:0;z-index:35;display:none;background:rgba(11,11,18,.9);padding-right:calc(76px + env(safe-area-inset-right))}
+#viewer.full #vbar{position:absolute;bottom:0;left:0;right:0;z-index:35;display:none;background:rgba(11,11,18,.9)}
+#viewer.full.menu #vtop{display:flex}
+#viewer.full.menu #vbar{display:grid}
+#viewer.full #vwrap{position:absolute;inset:0}
+#vkb{display:none;gap:6px;flex-wrap:wrap;padding:8px calc(8px + env(safe-area-inset-right)) 8px calc(8px + env(safe-area-inset-left));background:#0b0b12;border-top:1px solid var(--line)}
+#vkb.show{display:flex}
+#vkb input{flex:1;min-width:150px}
+#vkb button{min-height:42px;min-width:46px}
+#viewer.full #vkb{position:absolute;bottom:0;left:0;right:0;z-index:36;background:rgba(11,11,18,.94)}
+#viewer.full.menu #vkb{bottom:calc(82px + env(safe-area-inset-bottom))}
+#toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom));transform:translateX(-50%);background:rgba(30,30,46,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line2);padding:11px 18px;border-radius:14px;z-index:50;display:none;max-width:90vw;box-shadow:0 12px 30px -10px rgba(0,0,0,.8)}
+.fl{display:flex;align-items:center;gap:8px;padding:10px 4px;border-bottom:1px solid var(--line)}
+.fl .n{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fl.d .n{cursor:pointer;color:#b9a8ff}
+
+/* ---- v15 modern gorunum ---- */
+:root{--bg:#06060b;--card:rgba(24,24,38,.72);--glow:rgba(124,92,255,.35)}
+html{touch-action:manipulation;-webkit-text-size-adjust:100%}
+body{background:radial-gradient(900px 520px at 8% -8%,rgba(124,92,255,.28),transparent 60%),radial-gradient(800px 480px at 105% 4%,rgba(255,92,200,.16),transparent 60%),radial-gradient(700px 500px at 50% 120%,rgba(60,140,255,.12),transparent 60%),var(--bg);background-attachment:fixed}
+header{background:rgba(8,8,14,.6);border-bottom:1px solid rgba(255,255,255,.06)}
+.logo{font-size:20px;background:linear-gradient(90deg,#fff,#c9b8ff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.logo i{border-radius:11px;box-shadow:0 8px 22px -6px rgba(140,80,255,.9),inset 0 1px 0 rgba(255,255,255,.35)}
+.logo i svg{color:#fff;-webkit-text-fill-color:initial}
+.card{background:linear-gradient(160deg,rgba(40,38,64,.62),rgba(14,14,24,.82));border:1px solid rgba(255,255,255,.08);border-radius:28px;padding:20px;box-shadow:0 30px 60px -30px rgba(0,0,0,.95),0 0 0 1px rgba(124,92,255,.04),inset 0 1px 0 rgba(255,255,255,.07);transition:transform .25s,box-shadow .25s}
+.card:hover{box-shadow:0 30px 70px -28px rgba(0,0,0,.95),0 0 40px -12px var(--glow),inset 0 1px 0 rgba(255,255,255,.09)}
+.av{width:50px;height:50px;border-radius:17px;background:linear-gradient(135deg,rgba(124,92,255,.38),rgba(192,75,255,.18));box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 10px 24px -12px rgba(140,80,255,.8)}
+.ch h3{font-size:18px;font-weight:700}
+.pill{padding:5px 11px;border:1px solid rgba(255,255,255,.06)}
+.pill.on{border-color:rgba(48,212,124,.25);box-shadow:0 0 18px -6px rgba(48,212,124,.7)}
+.chip{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.07);padding:5px 11px}
+.bar{height:7px;background:rgba(255,255,255,.07)}
+.bar>i{box-shadow:0 0 12px -2px rgba(48,212,124,.6)}
+button{border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+button.pri{background:linear-gradient(135deg,#7c5cff,#c04bff 70%,#ff6ad5);box-shadow:0 12px 28px -10px rgba(160,80,255,.85),inset 0 1px 0 rgba(255,255,255,.3)}
+.acts button,.pair button,.pgrid button{border-radius:18px}
+.acts button svg,.pgrid button svg{color:#cbbcff}
+.acts button.pri svg{color:#fff}
+.sheet{background:linear-gradient(180deg,#171726,#0e0e18);border:1px solid rgba(255,255,255,.1);border-bottom:0;border-radius:30px 30px 0 0;box-shadow:0 -30px 80px -20px rgba(0,0,0,.9)}
+.sheet:before{content:"";display:block;width:44px;height:5px;border-radius:5px;background:rgba(255,255,255,.18);margin:-6px auto 14px}
+@media(min-width:700px){.sheet{border-radius:28px;border-bottom:1px solid rgba(255,255,255,.1)}.sheet:before{display:none}}
+input[type=text],textarea{background:rgba(0,0,0,.4);border-radius:14px}
+.seg{background:rgba(255,255,255,.06);border-radius:15px}
+.seg button{background:transparent;border:0;box-shadow:none}
+.seg button.on{background:linear-gradient(180deg,rgba(124,92,255,.35),rgba(124,92,255,.2));color:#fff}
+#vtop,#vbar,#vkb{background:rgba(10,10,18,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.vb{border-radius:16px}
+#vimg,#vwrap{-webkit-user-select:none;user-select:none;touch-action:none}
+#toast{border-radius:16px;background:rgba(24,24,40,.94)}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo"><i id="logoI"></i>UzakMasa</div>
+  <button id="bAdd" title="Bilgisayar ekle" aria-label="Bilgisayar ekle"></button>
+  <button id="bPhone" title="Telefona bağla" aria-label="Telefona bağla"></button>
+  <button id="bSet" title="Ayarlar" aria-label="Ayarlar"></button>
+</header>
+<main>
+  <div id="grid" class="grid"></div>
+  <div id="empty" class="empty" style="display:none">Henüz bilgisayar yok.<br><br><button class="pri" onclick="showAdd()">İlk bilgisayarını ekle</button></div>
+</main>
+
+<!-- Kurulum (ilk açılış) -->
+<div class="modal" id="mSetup"><div class="sheet">
+  <h2>İlk kurulum (bir kerelik)</h2>
+  <ol>
+    <li><b>console.firebase.google.com</b> → proje oluştur (Analytics kapalı olabilir).</li>
+    <li><b>Build → Realtime Database → Create database</b> (herhangi bir konum, "locked mode").</li>
+    <li><b>Rules</b> sekmesine aşağıdakini yapıştırıp <b>Publish</b> de:</li>
+  </ol>
+  <pre id="rules"></pre>
+  <button class="sm" onclick="copyText(document.getElementById('rules').textContent)">Kuralları kopyala</button>
+  <ol start="4"><li>Database sayfasının üstündeki adresi (<code style="display:inline;padding:2px 6px">https://….firebasedatabase.app</code>) buraya yapıştır. Zaten kurulu bir panelin varsa onun <b>"Telefona bağla" bağlantısını</b> yapıştır:</li></ol>
+  <input type="text" id="dbIn" placeholder="Veritabanı adresi ya da Telefona bağla bağlantısı" autocapitalize="off" autocorrect="off">
+  <div class="btns"><button class="pri" id="bSave">Kaydet</button></div>
+  <p class="warn" id="setupErr"></p>
+</div></div>
+
+<!-- Bilgisayar ekle -->
+<div class="modal" id="mAdd"><div class="sheet">
+  <h2>Yeni bilgisayar ekle</h2>
+  <ol>
+    <li>Eklemek istediğin <b>Windows</b> bilgisayarda PowerShell aç (Başlat → "PowerShell").</li>
+    <li>Aşağıdaki komutu kopyala, PowerShell'e yapıştır (sağ tık) ve Enter'a bas.</li>
+    <li>Birkaç saniye içinde bilgisayar burada görünür.</li>
+  </ol>
+  <input type="text" id="addName" placeholder="Bilgisayar adı (isteğe bağlı, örn. Lenovo)">
+  <pre id="addCmd"></pre>
+  <div class="btns"><button class="pri" onclick="copyText(document.getElementById('addCmd').textContent)">Komutu kopyala</button></div>
+  <p class="warn">Komut senin gizli anahtarını içerir; sadece kendi bilgisayarlarında kullan. Windows Defender uyarırsa: ajan ekran görüntüsü alıp fareyi kontrol ettiği için "şüpheli" bulabilir, izin ver.</p>
+  <details><summary class="sub">Bilgisayardan kaldırma komutu</summary><pre id="rmCmd"></pre></details>
+  <div class="btns"><button onclick="closeM('mAdd')">Kapat</button></div>
+</div></div>
+
+<!-- Telefona bağla / Ayarlar -->
+<div class="modal" id="mPhone"><div class="sheet">
+  <h2>Telefona / başka cihaza bağla</h2>
+  <p class="sub">Bu bağlantıyı aç; bağlantı bilgilerin (Firebase adresi + gizli anahtar) o cihaza otomatik aktarılır. Kendine mesajla gönder, başkasına verme.</p>
+  <pre id="phoneLink"></pre>
+  <div class="btns"><button class="pri" onclick="copyText(document.getElementById('phoneLink').textContent)">Bağlantıyı kopyala</button><button onclick="closeM('mPhone')">Kapat</button></div>
+</div></div>
+<div class="modal" id="mSet"><div class="sheet">
+  <h2>Ayarlar</h2>
+  <div class="sub">Firebase adresi</div><input type="text" id="setDb">
+  <div class="sub" style="margin-top:10px">Uyandırma konusu (ntfy.sh adı, Nöbet görevinin dinlediği)</div><input type="text" id="setWake" placeholder="uyan-konu-adi">
+  <div class="sub" style="margin-top:10px">Bildirim konusu: laptop uyanınca ya da pili azalınca telefona bildirim gelsin istersen ntfy uygulamasında bu konuya abone ol</div>
+  <pre id="setNtfy"></pre><button class="sm" onclick="copyText(document.getElementById('setNtfy').textContent)">Konuyu kopyala</button>
+  <div class="btns"><button class="pri" id="bSetSave">Kaydet</button>
+  <button id="bKeyNew">Yeni gizli anahtar üret</button><button onclick="closeM('mSet')">Kapat</button></div>
+  <p class="warn">Yeni anahtar üretirsen bilgisayarları yeniden eklemen gerekir (eski anahtarla çalışanlar kopar).</p>
+</div></div>
+
+<!-- Pano -->
+<div class="modal" id="mClip"><div class="sheet">
+  <h2 id="cTitle">Pano</h2>
+  <p class="sub">Laptopta kopyaladığını buraya çek, ya da buraya yapıştırdığını laptopun panosuna gönder.</p>
+  <textarea id="cText" placeholder="Metin…" autocapitalize="off" autocorrect="off" spellcheck="false"></textarea>
+  <div class="btns"><button class="pri" id="cGet">Laptoptan al</button><button id="cSet">Laptopa gönder</button><button id="cCopy">Kopyala</button><button onclick="closeM('mClip')">Kapat</button></div>
+</div></div>
+
+<!-- Kumanda -->
+<div class="modal" id="mPow"><div class="sheet">
+  <h2 id="pTitle">Kumanda</h2>
+  <div class="sub">Ses ve medya</div>
+  <div class="pgrid" id="pGrid1"></div>
+  <div class="sub" style="margin-top:14px">Ekran parlaklığı</div>
+  <input type="range" id="pBright" min="0" max="100" step="5" value="60">
+  <div class="sub" style="margin-top:14px">Güç</div>
+  <div class="pgrid" id="pGrid2"></div>
+  <div class="btns"><button onclick="closeM('mPow')">Kapat</button></div>
+</div></div>
+
+<!-- Dosya gezgini -->
+<div class="modal" id="mFiles"><div class="sheet">
+  <h2 id="fTitle">Dosyalar</h2>
+  <div class="sub" id="fPath"></div>
+  <div id="fList"></div>
+  <div class="btns"><button onclick="closeM('mFiles')">Kapat</button></div>
+</div></div>
+
+<!-- Uygulamalar -->
+<div class="modal" id="mApps"><div class="sheet">
+  <div class="shead"><h2 id="aTitle">Uygulamalar</h2><button id="aRefresh" aria-label="Yenile"></button></div>
+  <div class="seg"><button id="tRun" class="on">Açık olanlar</button><button id="tAll">Uygulama aç</button></div>
+  <input type="text" id="aSearch" placeholder="Ara…" autocapitalize="off" autocorrect="off">
+  <div id="aList"></div>
+  <div class="btns"><button onclick="closeM('mApps')">Kapat</button></div>
+</div></div>
+
+<!-- Ekran görüntüleyici -->
+<div id="viewer">
+  <div id="vtop"><button id="vClose" aria-label="Kapat"></button><button id="vZoom" class="sm" style="display:none">Yakınlaştırmayı sıfırla</button><span id="vstat">bağlanıyor…</span></div>
+  <button id="vfab" aria-label="Menü"></button>
+  <div id="vwrap"><img id="vimg" alt=""></div>
+  <div id="vkb">
+    <input type="text" id="vText" placeholder="Yaz, anında gider" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false">
+    <button class="sm on" id="vLive">Canlı</button>
+    <button class="sm pri" id="vSend" style="display:none">Gönder</button>
+    <button class="sm" data-k="ENTER">Enter</button><button class="sm" data-k="BACKSPACE">⌫</button>
+    <button class="sm" data-k="ESC">Esc</button><button class="sm" data-k="TAB">Tab</button>
+    <button class="sm" data-k="WIN">Win</button>
+    <button class="sm" data-k="UP">↑</button><button class="sm" data-k="DOWN">↓</button>
+    <button class="sm" data-k="LEFT">←</button><button class="sm" data-k="RIGHT">→</button>
+    <button class="sm" data-k="c" data-m="ctrl">Ctrl+C</button><button class="sm" data-k="v" data-m="ctrl">Ctrl+V</button>
+    <button class="sm" data-k="a" data-m="ctrl">Ctrl+A</button><button class="sm" data-k="F4" data-m="alt">Alt+F4</button>
+  </div>
+  <div id="vbar">
+    <button class="vb" id="vMode"></button>
+    <button class="vb" id="vDbl"></button>
+    <button class="vb" id="vRight"></button>
+    <button class="vb" id="vKbT"></button>
+    <button class="vb" id="vFull"></button>
+  </div>
+</div>
+<input type="file" id="fileIn" multiple style="display:none">
+<div id="toast"></div>
+
+<script>
+/* Cift dokunusla sayfanin kendi kendine yakinlasmasini engelle (iOS) */
+(function(){
+  var stop=function(e){e.preventDefault()};
+  ['gesturestart','gesturechange','gestureend','dblclick'].forEach(function(n){document.addEventListener(n,stop,{passive:false})});
+  var last=0;
+  document.addEventListener('touchend',function(e){
+    var now=Date.now(); if(now-last<350 && e.target.tagName!=='INPUT' && e.target.tagName!=='TEXTAREA') e.preventDefault(); last=now;
+  },{passive:false});
+  document.addEventListener('touchmove',function(e){ if(e.touches.length>1 && !(e.target.closest && e.target.closest('#vwrap'))) e.preventDefault(); },{passive:false});
+})();
+</script>
+<script src="/app.js"></script>
+</body>
+</html>
