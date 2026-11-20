@@ -10,6 +10,14 @@ Telefonundan Windows bilgisayarını uzaktan gör ve yönet: canlı ekran, fare/
 Telefon (web paneli)  <->  SENİN Firebase veritabanın  <->  Windows ajanı (PowerShell)
 ```
 
+## English summary
+
+UzakMasa lets you see and control your own Windows PC from your phone: live screen, mouse and keyboard, file transfer, clipboard, app launcher, volume and brightness, and an optional PIN-signed terminal.
+
+How it works: a static web panel (hosted on your own Vercel account) talks to your own Firebase Realtime Database, and a small zero-dependency PowerShell 5.1 agent on the PC reads commands from it. There is no central server, no telemetry, and no account with the author. Access requires your database URL plus a random 40-character secret key generated in your browser, so nobody (including the author) can reach your PC unless you share that key.
+
+Quick setup: 1) create a Firebase Realtime Database and paste the rules the panel shows, 2) deploy the web folder to Vercel (Root Directory = web), 3) open your site, enter the database URL, then use "Bilgisayar ekle" (Add computer) to copy the one-line install command into PowerShell on the PC. The panel UI is in Turkish. See SECURITY.md before using it and never share your connect link, install command or terminal PIN.
+
 ## ⚠️ Önce oku
 Bu bir uzaktan kontrol aracıdır. Gizli anahtarı bilen biri bilgisayarını görür ve yönetir.
 - Bu repoda **anahtar, veritabanı adresi, site adresi ya da PIN yok**. Herkes kendi kurulumunu yapar; kimse başkasının bilgisayarına bu koddan bağlanamaz.
@@ -26,10 +34,10 @@ Bu bir uzaktan kontrol aracıdır. Gizli anahtarı bilen biri bilgisayarını g�
 - Birden çok bilgisayar
 
 ## Yapay zekayla kurulum (en kolay yol)
-Claude, ChatGPT ya da Gemini gibi bir yapay zekaya bu repoyu verip kurulumu adım adım yaptırabilirsin. Aşağıdakini kopyalayıp yapıştır (`REPO-ADRESİ` yerine bu sayfanın adresini yaz):
+Claude, ChatGPT ya da Gemini gibi bir yapay zekaya bu repoyu verip kurulumu adım adım yaptırabilirsin. Aşağıdakini kopyalayıp yapıştır:
 
 ```
-REPO-ADRESİ adresindeki UzakMasa projesini kurmak istiyorum. README'yi oku ve beni
+https://github.com/ardayigit7/uzakmasa adresindeki UzakMasa projesini kurmak istiyorum. README'yi oku ve beni
 adım adım yönlendir: Firebase Realtime Database kurulumu ve kuralları, Vercel'e
 "web" klasörünü Root Directory yaparak deploy etmek, sonra bilgisayarıma ajanı
 eklemek. Her adımı tek tek ver, ben yapıp sonucu yazayım. Hiçbir anahtarı, şifreyi
